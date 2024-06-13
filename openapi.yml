@@ -7,7 +7,7 @@ servers:
   - url: https://balisnap-qczsjfqsuq-et.a.run.app
     description: Production
   - url: http://localhost:3000
-    description: Lokal
+    description: Local Server
 paths:
   /destinations/nearby:
     get:
