@@ -1,0 +1,345 @@
+openapi: 3.0.0
+info:
+  title: BaliSnap API
+  description: BaliSnap adalah aplikasi pendeteksi gambar yang menyediakan informasi tentang berbagai budaya dan objek wisata di Bali bagi para wisatawan. Aplikasi ini menawarkan penjelasan singkat mengenai budaya dan objek wisata yang akan dikunjungi oleh wisatawan, terutama wisatawan mancanegara. 
+  version: 1.0.0
+servers:
+  - url: https://balisnap-qczsjfqsuq-et.a.run.app
+    description: Production
+  - url: http://localhost:3000
+    description: Lokal
+paths:
+  /destinations/nearby:
+    get:
+      summary: Mendapatkan lokasi terdekat
+      description: Mendapatkan daftar lokasi terdekat berdasarkan latitude, longitude, dan radius.
+      tags:
+        - Destination
+      parameters:
+        - in: query
+          name: latitude
+          required: true
+          schema:
+            type: string
+          description: Latitude dari lokasi saat ini
+        - in: query
+          name: longitude
+          required: true
+          schema:
+            type: string
+          description: Longitude dari lokasi saat ini
+        - in: query
+          name: radius
+          required: true
+          schema:
+            type: number
+            format: integer
+          description: Radius dalam kilometer untuk mencari lokasi terdekat
+      responses:
+        '200':
+          description: Daftar lokasi terdekat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      destinations:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            slug:
+                              type: string
+                            description:
+                              type: string
+                            image:
+                              type: string
+                            latitude:
+                              type: string
+                            longitude:
+                              type: string
+                            distance:
+                              type: number
+                              format: float
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+        '400':
+          description: Parameters required
+        '500':
+          description: Internal Server Error
+  
+  /destinations/search:
+    get:
+      summary: Mencari destinasi berdasarkan nama
+      description: Mendapatkan daftar destinasi yang sesuai dengan nama yang diberikan.
+      tags:
+        - Destination
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+          description: Nama destinasi yang dicari
+      responses:
+        '200':
+          description: Daftar destinasi berdasarkan nama
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      destinations:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            slug:
+                              type: string
+                            description:
+                              type: string
+                            image:
+                              type: string
+                            latitude:
+                              type: string
+                            longitude:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+        '400':
+          description: Name paremeter is required
+        '500':
+          description: Internal Server Error
+          
+  /destinations/{slug}:
+    get:
+      summary: Mendapatkan destinasi berdasarkan slug
+      description: Mendapatkan detail destinasi berdasarkan slug yang diberikan.
+      tags:
+        - Destination
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+          description: Slug dari destinasi yang dicari
+      responses:
+        '200':
+          description: Detail destinasi berdasarkan slug
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      destination:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          slug:
+                            type: string
+                          description:
+                            type: string
+                          image:
+                            type: string
+                          latitude:
+                            type: string
+                          longitude:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_at:
+                            type: string
+                            format: date-time
+        '404':
+          description: Destination not found
+        '500':
+          description: Internal Server Error
+        
+  /foods:
+    get:
+      summary: Mendapatkan semua makanan
+      description: Mendapatkan daftar semua makanan yang tersedia.
+      tags:
+        - Food
+      responses:
+        '200':
+          description: Daftar semua makanan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      foods:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            image:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                            locations:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                  link:
+                                    type: string
+        '500':
+          description: Internal Server Error  
+          
+  /foods/search:
+    get:
+      summary: Mencari makanan berdasarkan nama
+      description: Mendapatkan daftar makanan yang sesuai dengan nama yang diberikan.
+      tags:
+        - Food
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+          description: Nama makanan yang dicari
+      responses:
+        '200':
+          description: Daftar makanan berdasarkan nama
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      foods:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            image:
+                              type: string
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                            locations:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                  link:
+                                    type: string
+        '500':
+          description: Internal Server Error
+          
+  /foods/{id}:
+    get:
+      summary: Mencari makanan berdasarkan ID
+      description: Mendapatkan detail makanan berdasarkan ID yang diberikan.
+      tags:
+        - Food
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID dari makanan yang dicari
+      responses:
+        '200':
+          description: Detail makanan berdasarkan ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      food:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          description:
+                            type: string
+                          image:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_at:
+                            type: string
+                            format: date-time
+                          locations:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                link:
+                                  type: string
+        '404':
+          description: Food with id $id not found
+        '500':
+          description: Internal Server Error
+
